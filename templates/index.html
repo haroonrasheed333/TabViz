@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+	    <link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">
+	    <link href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="./static/css/style.css" />
+
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="{{ url_for('static', filename='js/jquery.ui.widget.js') }}"></script>
+	    <script src="{{ url_for('static', filename='js/jquery.iframe-transport.js') }}"></script>
+	    <script src="{{ url_for('static', filename='js/jquery.fileupload.js') }}"></script>
+	    <script type="text/javascript" src="./static/js/jquery.tablesorter.js"></script>
+	    <script type="text/javascript" src="./static/js/script.js"></script>
+	    <script type="text/javascript" src="./static/js/script1.js"></script>
+
+		<title>Automated Table Generation</title>
+	</head>
+	<body>
+
+
+		<div class="container">
+        <div class="well">
+            <form style="margin: 0px;" id="file-upload" enctype="multipart/form-data">
+                <div class="row-fluid">
+                    <span class="btn btn-success fileinput-button">
+                        <i class="icon-plus icon-white"></i>
+                        <span>Add File...</span>
+                        <input id="fileupload" type="file" name="file" multiple>   
+                    </span>
+                    <span class="files">
+                    </span>
+                    <input class="btn btn-primary pull-right" type="button" value="Upload" />
+                </div>
+            </form>
+        </div>
+        <div id="table-display">
+        </div>
+
+		<textarea id="uploaded">{{update}}</textarea>
+		<textarea id="filename">{{filename}}</textarea>
+	</body>
+</html>
