@@ -1,6 +1,22 @@
 $(document).ready(function() {
 
-	var $cols = $('colgroup');
+    $('#open').css({"display":"none"});
+    $('#close').css({"display":"block"});
+
+    $('#close').on('click', function() {
+        $('#wrapperdiv').removeClass('wrapper');
+        $('#wrapperdiv').addClass('wrapperhover');
+        $('#open').css({"display":"block"});
+        $('#close').css({"display":"none"});
+    });
+
+    $('#open').on('click', function() {
+        $('#wrapperdiv').removeClass('wrapperhover');
+        $('#wrapperdiv').addClass('wrapper');
+        $('#close').css({"display":"block"});
+        $('#open').css({"display":"none"});
+    });
+
 
     var added_files = [];
     var submitted = false;
@@ -61,6 +77,7 @@ $(document).ready(function() {
 		        data: JSON.stringify(obj),
 		        success: function(data){
 		            console.log(data.length);
+                    $('#table-display').html('');
 		            var table = $('<table id="hor-minimalist-b"></table>');
 		            var thead = $('<thead></thead>');
 		            var head = $('<tr></tr>');
@@ -82,49 +99,35 @@ $(document).ready(function() {
 				    })
 				    //$("#target_table_id tbody").html(tbl_body);
 			        $('#table-display').append(table);
+                    $('tr').on('click', function() {
+                        $(this).toggleClass("select");
+                    });
 			        $("#hor-minimalist-b").tablesorter();
-			        addColumnHover(document.querySelector('table')); 
+
+                    $('#hover').on('click', function() {
+                        if($('#hover').is(':checked')) {
+                            $('td').hover(function() {
+                                var t = parseInt($(this).index()) + 1;
+                                $('td:nth-child(' + t + ')').addClass('hovered');
+                            },
+                            function() {
+                                var t = parseInt($(this).index()) + 1;
+                                $('td:nth-child(' + t + ')').removeClass('hovered');
+                            });
+                        }
+                        else {
+                            $('td').hover(function() {
+                                var t = parseInt($(this).index()) + 1;
+                                $('td:nth-child(' + t + ')').removeClass('hovered');
+                            },
+                            function() {
+                                var t = parseInt($(this).index()) + 1;
+                                $('td:nth-child(' + t + ')').removeClass('hovered');
+                            });
+                        }
+                    }); 
 			    }
 			});
 		}
     });
 });
-
-function addColumnHover(table) {
-    var HOVER_CLASS = 'hovered';
-    var hovered;
-
-    table.addEventListener('mouseover', function (e) {
-        if (e.target.tagName.toLowerCase() == 'td') {
-            var index = e.target.cellIndex;
-
-            hovered && hovered.forEach(function (cell) {
-                cell.classList.remove(HOVER_CLASS);
-            });
-
-            hovered = Array.prototype.map.call(
-                table.rows,
-                function (row) {
-                    var i = index;
-                    while (!cell && i >= 0) {
-                        var cell = row.cells[i];
-                        i -= 1;
-                    }
-                    return cell;
-                }
-            );
-
-            hovered.forEach(function (cell) {
-                cell.classList.add(HOVER_CLASS);
-            });
-        }
-    }, true);
-
-    table.addEventListener('mouseout', function (e) {
-        hovered && hovered.forEach(function (cell) {
-            cell.classList.remove(HOVER_CLASS);
-        });
-        hovered = null;
-    }, true);
-}
-

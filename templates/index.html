@@ -7,20 +7,20 @@
 		<link rel="stylesheet" type="text/css" href="./static/css/style.css" />
 
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="{{ url_for('static', filename='js/jquery-1.8.1.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/jquery.ui.widget.js') }}"></script>
 	    <script src="{{ url_for('static', filename='js/jquery.iframe-transport.js') }}"></script>
 	    <script src="{{ url_for('static', filename='js/jquery.fileupload.js') }}"></script>
 	    <script type="text/javascript" src="./static/js/jquery.tablesorter.js"></script>
 	    <script type="text/javascript" src="./static/js/script.js"></script>
-	    <script type="text/javascript" src="./static/js/script1.js"></script>
 
 		<title>Automated Table Generation</title>
 	</head>
 	<body>
 
 
-		<div class="container">
-        <div class="well">
+	<div class="container">
+        <div class="upload">
             <form style="margin: 0px;" id="file-upload" enctype="multipart/form-data">
                 <div class="row-fluid">
                     <span class="btn btn-success fileinput-button">
@@ -34,6 +34,21 @@
                 </div>
             </form>
         </div>
+    </div>
+        <div id="wrapperdiv" class="wrapper">
+		    <div class="toggle">
+		    	<span id="close">»</span>
+		    	<span id="open">«</span>
+		    </div>
+		    <div class="options">
+		    	<div id="inner-options">
+		    		<form>
+		    			<input id="hover" type="checkbox" name="hover">
+		    			<label for="hover">Hover Row & Column</label>
+		    		</form>
+		    	</div>
+		    </div>
+		</div>
         <div id="table-display">
         </div>
 
