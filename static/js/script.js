@@ -82,19 +82,23 @@ $(document).ready(function() {
 		            var thead = $('<thead></thead>');
 		            var head = $('<tr></tr>');
 		            var colgrp = $('<colgroup></colgroup>');
+                    var col_count = 1;
 		            for (var k = 0; k < Object.keys(data[1]).length; k++) {
-		            	var head1 = $('<th></th>').attr('scope', 'col').text(Object.keys(data[1])[k]);
+		            	var head1 = $('<th class="column' + col_count +'"></th>').attr('scope', 'col').text(Object.keys(data[1])[k]);
 		            	thead.append(head);
 		 	            head.append(head1);
 		 	            table.append(colgrp);
+                        col_count += 1
 		            }
 		            table.append(thead)
 				    $.each(data, function() {
 				        var row = $('<tr></tr>');
+                        col_count = 1;
 				        $.each(this, function(k , v) {
-				            var row1 = $('<td></td>').text(v);
+				            var row1 = $('<td class="column' + col_count +'"></td>').text(v);
 							table.append(row);
 		 	                row.append(row1);
+                            col_count += 1;
 				        })
 				    })
 				    //$("#target_table_id tbody").html(tbl_body);
@@ -124,6 +128,14 @@ $(document).ready(function() {
                                 var t = parseInt($(this).index()) + 1;
                                 $('td:nth-child(' + t + ')').removeClass('hovered');
                             });
+                        }
+                    }); 
+                    $('#column-display').on('click', function() {
+                        if($('#column-display').is(':checked')) {
+                            $('.column4').css({'display': 'none'});
+                        }
+                        else {
+                            $('.column4').css({'display': 'block'});
                         }
                     }); 
 			    }

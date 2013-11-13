@@ -14,7 +14,7 @@ app = flask.Flask(__name__)
 app.debug = True
 
 UPLOAD_FOLDER = ''
-ALLOWED_EXTENSIONS = set(['csv'])
+ALLOWED_EXTENSIONS = set(['csv', 'tsv'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -22,6 +22,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+def file_type(filename):
+    if '.' in filename:
+        return filename.rsplit('.', 1)[1]
 
 
 @app.route('/')
@@ -51,7 +55,11 @@ def csv2json():
     filename = request.json['filename']
 
     with open(filename, 'rU') as csv_file:
-        csv_dict = csv.DictReader(csv_file, restkey=None, restval=None,)
+        filetype = file_type(filename)
+        if filetype == 'csv':
+            csv_dict = csv.DictReader(csv_file, restkey=None, restval=None,)
+        elif filetype == 'tsv':
+            csv_dict = csv.DictReader(csv_file, delimiter='\t', restkey=None, restval=None,)
         out = [obj for obj in csv_dict]
         output = json.dumps(out)
 
