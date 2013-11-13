@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var val_array = [];
 
     $('#open').css({"display":"none"});
     $('#close').css({"display":"block"});
@@ -91,16 +92,22 @@ $(document).ready(function() {
                         col_count += 1
 		            }
 		            table.append(thead)
+                    var row_count = 1
 				    $.each(data, function() {
 				        var row = $('<tr></tr>');
                         col_count = 1;
 				        $.each(this, function(k , v) {
-				            var row1 = $('<td class="column' + col_count +'"></td>').text(v);
+				            var row1 = $('<td class="column' + col_count +' row' + row_count +'"></td>').text(v);
 							table.append(row);
 		 	                row.append(row1);
+                            row1.append('<hr class="columnhr' + col_count +' rowhr' + row_count +'" style="display:none;"/>')
+                            if (col_count == 3) {
+                                val_array.push(v);
+                            }
                             col_count += 1;
-				        })
-				    })
+				        });
+                        row_count += 1
+				    });
 				    //$("#target_table_id tbody").html(tbl_body);
 			        $('#table-display').append(table);
                     $('tr').on('click', function() {
@@ -136,6 +143,30 @@ $(document).ready(function() {
                         }
                         else {
                             $('.column4').css({'display': 'block'});
+                        }
+                    }); 
+                    $('#bar-display').on('click', function() {
+                        if($('#bar-display').is(':checked')) {
+                            $('.columnhr3').css({'display': 'block'});
+                            $('.columnhr3').css({'padding': '0px'});
+                            $('.columnhr3').css({'margin': '0px'});
+                            $('.columnhr3').css({'margin-top': '5px'});
+                            $('.columnhr3').css({'height': '5px'});
+                            $('.columnhr3').css({'background-color': 'grey'});
+                            console.log(val_array);
+                            for (var z = 1; z <= val_array.length; z++) {
+                                var width = val_array[z-1];
+                                if (width == 'NA') {
+                                    width = '0';
+                                }
+                                width = parseFloat(width) * 10;
+                                width = width + '%';
+                                console.log(width);
+                                $('.rowhr'+z).css({'width': width});
+                            }
+                        }
+                        else {
+                            $('.columnhr3').css({'display': 'none'});
                         }
                     }); 
 			    }
