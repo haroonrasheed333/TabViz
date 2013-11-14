@@ -154,12 +154,27 @@ $(document).ready(function() {
                             $('.columnhr3').css({'height': '5px'});
                             $('.columnhr3').css({'background-color': 'grey'});
                             console.log(val_array);
+                            var floar_arr = [];
                             for (var z = 1; z <= val_array.length; z++) {
-                                var width = val_array[z-1];
-                                if (isNaN(parseInt(width))) {
-                                    width = '0';
+                                var temp = val_array[z-1];
+                                if (isNaN(parseFloat(temp))) {
+                                    temp = '0';
                                 }
-                                width = parseFloat(width) * 10;
+                                floar_arr.push(parseFloat(temp));
+                            }
+                            console.log(floar_arr);
+                            var max = Math.max.apply(Math, floar_arr);
+                            var min = Math.min.apply(Math, floar_arr);
+                            console.log(max);
+                            console.log(min);
+                            for (var z = 1; z <= floar_arr.length; z++) {
+                                var width = floar_arr[z-1];
+                                if (max < 10) {
+                                    width = width*10;
+                                }
+                                else if (max < 100) {
+                                    width = width;
+                                }
                                 width = width + '%';
                                 $('.rowhr'+z).css({'width': width});
                             }
