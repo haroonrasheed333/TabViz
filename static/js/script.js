@@ -150,18 +150,17 @@ $(document).ready(function() {
                             $('.columnhr3').css({'display': 'block'});
                             $('.columnhr3').css({'padding': '0px'});
                             $('.columnhr3').css({'margin': '0px'});
-                            $('.columnhr3').css({'margin-top': '5px'});
+                            $('.columnhr3').css({'margin-top': '2px'});
                             $('.columnhr3').css({'height': '5px'});
                             $('.columnhr3').css({'background-color': 'grey'});
                             console.log(val_array);
                             for (var z = 1; z <= val_array.length; z++) {
                                 var width = val_array[z-1];
-                                if (parseInt(width) == 'NaN') {
+                                if (isNaN(parseInt(width))) {
                                     width = '0';
                                 }
                                 width = parseFloat(width) * 10;
                                 width = width + '%';
-                                console.log(width);
                                 $('.rowhr'+z).css({'width': width});
                             }
                         }
