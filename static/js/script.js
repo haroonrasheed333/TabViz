@@ -153,7 +153,6 @@ $(document).ready(function() {
                             $('.columnhr3').css({'margin-top': '2px'});
                             $('.columnhr3').css({'height': '5px'});
                             $('.columnhr3').css({'background-color': 'grey'});
-                            console.log(val_array);
                             var floar_arr = [];
                             for (var z = 1; z <= val_array.length; z++) {
                                 var temp = val_array[z-1];
@@ -162,11 +161,8 @@ $(document).ready(function() {
                                 }
                                 floar_arr.push(parseFloat(temp));
                             }
-                            console.log(floar_arr);
                             var max = Math.max.apply(Math, floar_arr);
                             var min = Math.min.apply(Math, floar_arr);
-                            console.log(max);
-                            console.log(min);
                             for (var z = 1; z <= floar_arr.length; z++) {
                                 var width = floar_arr[z-1];
                                 if (max < 10) {
