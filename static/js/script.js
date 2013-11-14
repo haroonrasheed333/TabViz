@@ -156,7 +156,7 @@ $(document).ready(function() {
                             console.log(val_array);
                             for (var z = 1; z <= val_array.length; z++) {
                                 var width = val_array[z-1];
-                                if (width == 'NA') {
+                                if (parseInt(width) == 'NaN') {
                                     width = '0';
                                 }
                                 width = parseFloat(width) * 10;
