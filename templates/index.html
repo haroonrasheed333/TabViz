@@ -26,14 +26,18 @@
                     <span class="btn btn-success fileinput-button">
                         <i class="icon-plus icon-white"></i>
                         <span>Add File...</span>
-                        <input id="fileupload" type="file" name="file" multiple>   
+                        <input id="fileupload" type="file" name="file" multiple>
                     </span>
                     <span class="files">
                     </span>
-                    <input class="btn btn-primary pull-right" type="button" value="Upload" />
+                    <input id="upload-button" class="btn btn-primary pull-right" type="button" value="Upload" />
                 </div>
             </form>
         </div>
+        <div id="wrapperdiv1" class="wrapper1">
+		    <div id="user-input">
+			</div>
+		</div>
     </div>
         <div id="wrapperdiv" class="wrapper">
 		    <div class="toggle">
@@ -49,6 +53,8 @@
 		    			<label for="column-display">Hide/Unhide Columns</label>
 		    			<input id="bar-display" type="checkbox" name="bar">
 		    			<label for="bar-display">Disply Bar Chart</label>
+		    			<input id="select-cells" type="checkbox" name="selectcells">
+		    			<label for="select-cells">Select Cells</label>
 
 		    		</form>
 		    	</div>

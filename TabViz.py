@@ -44,7 +44,11 @@ def fileupload():
 
             rand = ''.join(random.choice(string.ascii_uppercase) for i in range(12))
 
-            response = {'update': rand, 'filename': filename}
+            with open(filename, 'rU') as csv_file:
+                reader = csv.reader(csv_file)
+                header = reader.next()
+
+            response = {'update': rand, 'filename': filename, 'header': header}
 
 
             return json.dumps(response)
@@ -66,5 +70,5 @@ def csv2json():
     return output
 
 
-#if __name__ == "__main__":
-#    app.run(port=5000)
+if __name__ == "__main__":
+	app.run(port=5000)

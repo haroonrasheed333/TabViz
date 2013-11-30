@@ -39,12 +39,12 @@ label{
 
 .upload {
 	padding: 19px;
-	margin-bottom: 20px;
 	background-color: #f5f5f5;
 	border: 1px solid #e3e3e3;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
+	margin-bottom: 25px;
 }
 
 #uploaded, #filename {
@@ -83,7 +83,7 @@ textarea {
 #hor-minimalist-b {
 	font-size: 12px;
 	background: #fff;
-	width: 480px;
+	width: 500px;
 	border-collapse: collapse;
 	text-align: left;
 	margin: 0px auto
@@ -105,15 +105,23 @@ textarea {
 #hor-minimalist-b td {
 	color: #666;
 	padding: 6px 8px;
+	height: 40px;
 }
 
-#hor-minimalist-b tr:hover {
+#hor-minimalist-b td.selected {
+	background-color:#ccc;
+}
+
+#hor-minimalist-b th.selected {
+	background-color:#ccc;
+}
+
+/*#hor-minimalist-b tr {
+	height: 50px;
+}*/
+
+.hovered {
 	background-color: #eee;
-	cursor: pointer;
-}
-
-.hovered { 
-	background-color: #eee; 
 }
 
 table.tablesorter {
@@ -163,7 +171,6 @@ table.tablesorter .odd {
     top:150px;
     left:0;
     margin-left:-325px;
-    
     /* Makes opening smoothly */
     transition: margin-left ease 1s;
     -moz-transition: margin-left ease 1s;
@@ -225,3 +232,39 @@ table.tablesorter .odd {
 	padding-left: 10px;
 }
 
+/* normal */
+.wrapper1{
+    width:600px;
+    left:0;
+    margin-left: -50px;
+}
+
+#inner-options1 {
+	padding: 15px;
+}
+
+#wrapperdiv1 {
+	background-color: #f5f5f5;
+	border: 1px solid #e3e3e3;
+	display: none;
+}
+
+#input-options-table {
+	margin: 25px;
+}
+
+#input-options-table td {
+	padding: 10px;
+	margin-left: 10px;
+	width: 100px;
+}
+
+#input-options-table th {
+	padding: 10px;
+	width: 100px;
+	text-align: left;
+}
+
+#input-options-table tbody {
+	margin-left: 10px;
+}
