@@ -63,52 +63,65 @@ $(document).ready(function() {
             console.log(data1.header);
 
             $('#user-input').html('');
+            var arr1 = [
+              {val : 'nominal', text: 'Nominal'},
+              {val : 'ordinal', text: 'Ordinal'},
+              {val : 'categorical', text: 'Categorical'},
+              {val : 'quant', text: 'Quantitative'}
+            ];
+
+            var arr2 = [
+              {val : '0', text: 'Select an Option'},
+              {val : 'financial', text: 'Financial'},
+              {val : 'date', text: 'Date'},
+              {val : 'currency', text: 'Currency'}
+            ];
+
+            var arr3 = [
+              {val : '0', text: 'Select an Option'},
+              {val : 'hiepar', text: 'Hie-Parent'},
+              {val : 'hiechi', text: 'Hei-Child'},
+            ];
+
             var table = $('<table id="input-options-table"></table>');
             var thead = $('<thead></thead>');
             var head = $('<tr></tr>');
             var head1 = $('<th></th>').attr('scope', 'col').text('Columns');
             thead.append(head);
             head.append(head1);
-            var head1 = $('<th></th>').attr('scope', 'col').text('Nominal');
-            thead.append(head);
-            head.append(head1);
-            var head1 = $('<th></th>').attr('scope', 'col').text('Ordinal');
-            thead.append(head);
-            head.append(head1);
-            var head1 = $('<th></th>').attr('scope', 'col').text('Hie-Parent');
-            thead.append(head);
-            head.append(head1);
-            var head1 = $('<th></th>').attr('scope', 'col').text('Hie-Child');
-            thead.append(head);
-            head.append(head1);
-            var head1 = $('<th></th>').attr('scope', 'col').text('Numeric');
+            var head1 = $('<th></th>').attr('scope', 'col').text('Options');
             thead.append(head);
             head.append(head1);
             table.append(thead);
-            for (var k = 0; k < data1.header.length; k++) {
+            for (var k = 1; k < data1.header.length+1; k++) {
                 var row = $('<tr></tr>');
-                var row1 = $('<td></td>').text(data1.header[k]);
-                row.append(row1);
-                var tdata = $('<td></td>');
-                var input = $('<INPUT TYPE = "radio" NAME="Nominal" VALUE=0>')
-                tdata.append(input);
-                row.append(tdata);
-                var tdata = $('<td></td>');
-                var input = $('<INPUT TYPE = "radio" NAME="Ordinal" VALUE=0>')
-                tdata.append(input);
-                row.append(tdata);
-                var tdata = $('<td></td>');
-                var input = $('<INPUT TYPE = "radio" NAME="Hie-Parent" VALUE=0>')
-                tdata.append(input);
-                row.append(tdata);
-                var tdata = $('<td></td>');
-                var input = $('<INPUT TYPE = "radio" NAME="Hie-Child" VALUE=0>')
-                tdata.append(input);
-                row.append(tdata);
-                var tdata = $('<td></td>');
-                var input = $('<INPUT TYPE = "radio" NAME="Numeric" VALUE=0>')
-                tdata.append(input);
-                row.append(tdata);
+                var dat = $('<td class="tablecolumn-' + k +'"></td>').text(data1.header[k-1]);
+                row.append(dat);
+
+                var dat1 = $('<td class="tablecolumn-' + k +'"></td>');
+                var sel1 = $('<select class="type1" id="type1-' + k +'">');
+                $(arr1).each(function() {
+                    sel1.append($("<option>").attr('value',this.val).text(this.text));
+                });
+                dat1.append(sel1);
+                row.append(dat1);
+
+                var dat2 = $('<td class="tablecolumn-' + k +'"></td>');
+                var sel2 = $('<select class="type2" id="type2-' + k +'">');
+                $(arr2).each(function() {
+                    sel2.append($("<option>").attr('value',this.val).text(this.text));
+                });
+                dat2.append(sel2);
+                row.append(dat2);
+
+                var dat3 = $('<td class="tablecolumn-' + k +'"></td>');
+                var sel3 = $('<select class="type3" id="type3-' + k +'">');
+                $(arr3).each(function() {
+                    sel3.append($("<option>").attr('value',this.val).text(this.text));
+                });
+                dat3.append(sel3);
+                row.append(dat3);
+
                 table.append(row);
             }
             var row = $('<tr></tr>');
@@ -126,7 +139,45 @@ $(document).ready(function() {
 
             $('#wrapperdiv1').css({'display': 'block'});
 
+            $( ".type1" ).change(function() {
+                var type = $(this).val();
+                var id = $(this).attr('id');
+                var column = id.split('-')[1];
+                $('#type2-'+column).css({'display': 'none'});
+                $('#type3-'+column).css({'display': 'none'});
+                if (type == 'quant') {
+                    $('#type2-'+column).css({'display': 'block'});
+                }
+                else if (type == 'categorical') {
+                    $('#type3-'+column).css({'display': 'block'});
+                }
+                else {
+                    //alert( $(this).val() );
+                }
+            });
+
             $('#visualize-button').on('click', function(e) {
+
+                var user_in = {}
+
+                for (var k = 1; k < data1.header.length+1; k++) {
+                    var type1_val = $('#type1-'+k).val();
+                    var type2_val = $('#type2-'+k).val();
+                    var type3_val = $('#type3-'+k).val();
+                    user_in['column-'+k] = ''
+                    if (type3_val != '0') {
+                        user_in['column-'+k] = type3_val;
+                    }
+                    else if (type2_val != '0') {
+                        user_in['column-'+k] = type2_val;
+                    }
+                    else {
+                        user_in['column-'+k] = type1_val;
+                    }
+                }
+
+                console.log(user_in);
+
                 $('#wrapperdiv1').css({'display': 'none'});
     			$.ajax('/csv2json', {
     			    type: "POST",
@@ -217,8 +268,8 @@ $(document).ready(function() {
                                         var active = false;
                                         $("#hor-minimalist-b td").mousedown(function(ev) {
                                             active = true;
-                                            $(".selected").removeClass("selected"); 
-                                            ev.preventDefault(); 
+                                            $(".selected").removeClass("selected");
+                                            ev.preventDefault();
                                             $(this).addClass("selected");
                                             $(this).closest('tr').find("td:nth-child(1)").addClass('selected');
                                             table.find('thead th').eq($(this).index()).addClass('selected');
@@ -231,13 +282,12 @@ $(document).ready(function() {
                                                 table.find('thead th').eq($(this).index()).addClass('selected');
                                             }
                                         });
-                                        
                                         $(document).mouseup(function(ev) {
                                             active = false;
                                         });
                                 });
                             }
-                        }); 
+                        });
 
                         $('#column-display').on('click', function() {
                             if($('#column-display').is(':checked')) {

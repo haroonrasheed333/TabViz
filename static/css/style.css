@@ -236,7 +236,7 @@ table.tablesorter .odd {
 .wrapper1{
     width:600px;
     left:0;
-    margin-left: -50px;
+    margin-left: -75px;
 }
 
 #inner-options1 {
@@ -244,8 +244,6 @@ table.tablesorter .odd {
 }
 
 #wrapperdiv1 {
-	background-color: #f5f5f5;
-	border: 1px solid #e3e3e3;
 	display: none;
 }
 
@@ -267,4 +265,12 @@ table.tablesorter .odd {
 
 #input-options-table tbody {
 	margin-left: 10px;
+}
+
+select {
+	width: 150px;
+}
+
+.type2, .type3 {
+	display: none;
 }
