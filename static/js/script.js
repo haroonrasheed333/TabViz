@@ -182,6 +182,11 @@ $(document).ready(function() {
                 dat5.append(denom);
                 row.append(dat5);
 
+                var dat6 = $('<td class="datefor" id="datefor-' + k +'" width="30px" class="tablecolumn-' + k +'"></td>');
+                var datefor = $("<input id='datefor-col-" + k +"' type='text' placeholder='Date Format' value=''/>")
+                dat6.append(datefor);
+                row.append(dat6);
+
                 table.append(row);
             }
             var row = $('<tr></tr>');
@@ -205,11 +210,15 @@ $(document).ready(function() {
                 var column = id.split('-')[1];
                 $('#type2td-'+column).css({'display': 'none'});
                 $('#type3td-'+column).css({'display': 'none'});
+                $('#datefor-'+column).css({'display': 'none'});
                 if (type == 'quant') {
                     $('#type2td-'+column).css({'display': 'block'});
                 }
                 else if (type == 'rowheader') {
                     $('#type3td-'+column).css({'display': 'block'});
+                }
+                else if (type == 'date') {
+                    $('#datefor-'+column).css({'display': 'block'});
                 }
                 else {
                     //alert( $(this).val() );
@@ -258,9 +267,13 @@ $(document).ready(function() {
                 var number_columns = [];
                 var hieparents = [];
                 var hiechilds = [];
+                var date_columns = [];
                 for (var ui in user_in) {
                     if (user_in[ui] == 'number' || user_in[ui] == 'currency') {
                         number_columns.push(ui);
+                    }
+                    if (user_in[ui] == 'date') {
+                        date_columns.push(ui);
                     }
                     if (user_in[ui] == 'hiepar') {
                         hieparents.push(ui);
@@ -331,6 +344,7 @@ $(document).ready(function() {
                             var value = Object.keys(data[1])[k-1];
                             var unit_val = $('#units-col-' + k).val();
                             var denom_val = $('#denom-col-' + k).val();
+                            var date_val = $('#datefor-col-' + k).val();
 
                             //if (typeof(number_values[column_number]) === 'undefined') {
                             if (unit_val != '') {
@@ -339,6 +353,10 @@ $(document).ready(function() {
 
                             if (denom_val != '') {
                                 value = Object.keys(data[1])[k-1] + ' (' + denom_val + ')';
+                            }
+
+                            if (date_val != '') {
+                                value = Object.keys(data[1])[k-1] + ' (' + date_val + ')';
                             }
 
                             var span1 = $('<span></span>').text(value);
@@ -353,6 +371,7 @@ $(document).ready(function() {
     		            table.append(thead)
                         var row_count = 1
                         var number_values = {};
+                        var date_values = {};
     				    $.each(data, function() {
     				        var row = $('<tr></tr>');
                             col_count = 1;
@@ -362,7 +381,13 @@ $(document).ready(function() {
                                 if (v == 'NA') {
                                     v = '';
                                 }
-                                var data_span = $('<span class="column-' + col_count +' row-' + row_count +'"></span>').text(v);
+                                var data_span;
+                                if (user_in[column_number] == 'number' || user_in[column_number] == 'currency') {
+                                    data_span = $('<span class="column-' + col_count +' row-' + row_count +'"></span>').text(parseFloat(v.replace(/[^-0-9\.]+/g,"")));
+                                }
+                                else {
+                                    data_span = $('<span class="column-' + col_count +' row-' + row_count +'"></span>').text(v);
+                                }
     							table.append(row);
     		 	                row.append(row1);
                                 row1.append(data_span);
@@ -376,6 +401,13 @@ $(document).ready(function() {
                                     }
                                     number_values[column_number].push(v);
                                 }
+
+                                if (user_in[column_number] == 'date') {
+                                    if (typeof(date_values[column_number]) === 'undefined') {
+                                        date_values[column_number] = [];
+                                    }
+                                    date_values[column_number].push(v);
+                                }
                                 col_count += 1;
     				        });
                             /*table.find('td:last-child').addClass('collast');*/
@@ -384,9 +416,17 @@ $(document).ready(function() {
                         /*table.find('tr:last').addClass('rowlast');*/
 
     			        $('#table-display').append(table);
-    			        $(".tablesorter").tablesorter({sortList:[[0,0]], widgets: ['zebra']});
+    			        $(".tablesorter").tablesorter();
 
                         $('#legend').css({'display': 'block'});
+
+                        $('.datefor').css({'text-align': 'right'});
+
+                        for (var i = 0; i < date_columns.length; i++) {
+                            //console.log(number_columns[i]);
+                            $('.'+date_columns[i]).css({'text-align': 'right'});
+                            $('.'+date_columns[i]).css({'float': 'right'});
+                        }
 
                         for (var i = 0; i < number_columns.length; i++) {
                             //console.log(number_columns[i]);

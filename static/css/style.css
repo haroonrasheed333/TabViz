@@ -100,7 +100,7 @@ select {
 	width: 150px;
 }
 
-.type2td, .type3td, .units, .denom {
+.type2td, .type3td, .units, .denom, .datefor {
 	display: none;
 }
 
@@ -149,6 +149,7 @@ span.sortArrow {
 	background: #fff;
 	width: 500px;
 	border-collapse: collapse;
+	border: 2px solid #666;
 	text-align: left;
 	margin-top:auto;
 	margin-bottom:30px;
