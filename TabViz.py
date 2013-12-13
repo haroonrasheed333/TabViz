@@ -8,7 +8,7 @@ import csv
 import os
 import random
 import string
-
+import collections
 
 app = flask.Flask(__name__)
 app.debug = True
@@ -64,11 +64,19 @@ def csv2json():
             csv_dict = csv.DictReader(csv_file, restkey=None, restval=None,)
         elif filetype == 'tsv':
             csv_dict = csv.DictReader(csv_file, delimiter='\t', restkey=None, restval=None,)
-        out = [obj for obj in csv_dict]
+
+        out = []
+        header = csv_dict.fieldnames
+        for row in csv_dict:
+            temp_list = []
+            for h in header:
+                temp_list.append((h, row[h]))
+            out.append(collections.OrderedDict(temp_list))
+        #out = [obj for obj in csv_dict]
         output = json.dumps(out)
 
     return output
 
 
-if __name__ == "__main__":
-	app.run(port=5000)
+#if __name__ == "__main__":
+#	app.run(port=5000)

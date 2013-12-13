@@ -11,6 +11,7 @@
 		<script src="{{ url_for('static', filename='js/jquery.ui.widget.js') }}"></script>
 	    <script src="{{ url_for('static', filename='js/jquery.iframe-transport.js') }}"></script>
 	    <script src="{{ url_for('static', filename='js/jquery.fileupload.js') }}"></script>
+	    <script src="{{ url_for('static', filename='js/html2canvas.js') }}"></script>
 	    <script type="text/javascript" src="./static/js/jquery.tablesorter.js"></script>
 	    <script type="text/javascript" src="./static/js/script.js"></script>
 
@@ -34,36 +35,63 @@
                 </div>
             </form>
         </div>
-        <div id="wrapperdiv1" class="wrapper1">
+        <div id="wrapperdiv1">
 		    <div id="user-input">
 			</div>
 		</div>
     </div>
-        <div id="wrapperdiv" class="wrapper">
-		    <div class="toggle">
-		    	<span id="close">»</span>
-		    	<span id="open">«</span>
-		    </div>
-		    <div class="options">
-		    	<div id="inner-options">
-		    		<form>
-		    			<input id="hover" type="checkbox" name="hover">
-		    			<label for="hover">Hover Row & Column</label>
-		    			<input id="column-display" type="checkbox" name="hover">
-		    			<label for="column-display">Hide/Unhide Columns</label>
-		    			<input id="bar-display" type="checkbox" name="bar">
-		    			<label for="bar-display">Disply Bar Chart</label>
-		    			<input id="select-cells" type="checkbox" name="selectcells">
-		    			<label for="select-cells">Select Cells</label>
 
-		    		</form>
-		    	</div>
-		    </div>
-		</div>
-        <div id="table-display">
-        </div>
+    <div id="table-display">
+    </div>
 
-		<textarea id="uploaded">{{update}}</textarea>
-		<textarea id="filename">{{filename}}</textarea>
+    <table id="legend">
+        <tr>
+            <td class="max-color"></td>
+            <td class="max-text">Maximum</td>
+            <td class="min-color"></td>
+            <td class="max-text">Minimum</td>
+        </tr>
+    </table>
+
+    <div id="wrapperdiv" class="wrapper">
+	    <div class="toggle">
+	    	<span id="close">»</span>
+	    	<span id="open">«</span>
+	    </div>
+	    <div class="options">
+	    	<div id="inner-options">
+    			<div id="bar-display">
+    				<br>
+	    			<h4>Display Trend</h4>
+    			</div>
+    			<div id="compress-checkbox">
+    				<br>
+	    			<h4>Compress Rows</h4>
+	    			<input class="compress-rows" id="compress-rows" type="checkbox" name="compressrows">
+    				<label for="compress-rows">Compress Rows</label>
+    			</div>
+    			<div id="summary-checkbox">
+    				<br>
+	    			<h4>Summarize</h4>
+	    			<input class="summarize-columns" id="summarize-columns" type="checkbox" name="summarizecolumns">
+    				<label for="summarize-columns">Columns</label>
+	    			<input class="summarize-rows" id="summarize-rows" type="checkbox" name="summarizerows">
+    				<label for="summarize-rows">Rows</label>
+    			</div>
+                <div id="other-interactions">
+                    <br>
+                    <h4>Other Interactions</h4>
+                    <input id="hover" type="checkbox" name="hover">
+                    <label for="hover">Hover Row & Column</label>
+                    <input id="select-cells" type="checkbox" name="selectcells">
+                    <label for="select-cells">Select Cells</label>
+                </div>
+    			<input id="export-image" class="btn btn-primary pull-right" type="button" value="Export Image" />
+	    	</div>
+	    </div>
+	</div>
+
+	<textarea id="uploaded">{{update}}</textarea>
+	<textarea id="filename">{{filename}}</textarea>
 	</body>
 </html>
