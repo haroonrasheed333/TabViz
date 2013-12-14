@@ -20,6 +20,7 @@ $(document).ready(function() {
         $('#open').css({"display":"none"});
     });
 
+    // Use html2canvas plugin to save export the html table as an image.
     // http://stackoverflow.com/questions/16429214/html2canvas-saving-as-a-jpeg-without-opening-in-browser
     function download(img) {
         var D = document,
@@ -48,8 +49,6 @@ $(document).ready(function() {
             useCORS: true,
             onrendered: function (canvas) {
                 img = canvas.toDataURL("image/jpg");
-                //console.log(img.length);
-                //console.log(img);
                 download(img);
             }
         });
@@ -58,20 +57,20 @@ $(document).ready(function() {
 
     var added_files = [];
     var submitted = false;
+
+    // jQuery file upload plugin. Modified the code to upload the file to a python flask server
+    // https://github.com/blueimp/jQuery-File-Upload
     $('#file-upload').fileupload({
         dataType: 'json',
         singleFileUploads: true,
         forceIframeTransport: true,
         url: '/fileupload',
         add: function (e, data) {
-            //console.log('add', data);
             added_files.push(data);
             $('#upload-button').unbind('click');
             $('#upload-button').on('click', function(e) {
                 e.preventDefault();
                 data.formData = $('#file-upload').serializeArray();
-                //console.log('haroon');
-                //console.log(data);
                 var original_data = data;
                 var new_data = {files: [], originalFiles: [], paramName: []};
                 jQuery.each(added_files, function(index, file) {
@@ -80,24 +79,18 @@ $(document).ready(function() {
                     new_data['paramName'] = jQuery.merge(new_data['paramName'], file.paramName);
                     });
                 new_data = jQuery.extend({}, original_data, new_data);
-                //console.log(new_data);
                 new_data.submit();
             });
         },
         submit: function (e, data) {
-            //console.log('submitted');
         },
         done: function (e, data) {
-            //console.log('done uploading');
         },
         send: function (e, data) {
-            //console.log('sending');
         },
         success: function(data1){
-			//console.log('123', data1);
 			$('#filename').text(data1.filename);
 			$('#uploaded').text(data1.update).trigger('change');
-            //console.log(data1.header);
 
             $('#user-input').html('');
             var arr1 = [
@@ -120,12 +113,14 @@ $(document).ready(function() {
               {val : 'hiechi', text: 'Hierarchy Child'},
             ];
 
+            // Dynamically create the user input table to get the table metadata from the user.
             var table = $('<table id="input-options-table"></table>');
             var thead = $('<thead></thead>');
             var title = $('<tr></tr>');
             var title_th = $('<th></th>');
             var title_box = $("<label for='table-title'>Table Title</label><input id='table-title' type='text' value=''/>")
             var subtitle_box = $("<label for='table-subtitle'>Table Subtitle</label><input id='table-subtitle' type='text' value=''/>")
+
             thead.append(title);
             title.append(title_th);
             title_th.append(title_box);
@@ -189,6 +184,7 @@ $(document).ready(function() {
 
                 table.append(row);
             }
+
             var row = $('<tr></tr>');
             var vis_btn = '<input id="visualize-button" class="btn btn-primary" type="button" value="Visualize" />';
             row.append(vis_btn);
@@ -204,6 +200,7 @@ $(document).ready(function() {
 
             $('#wrapperdiv1').css({'display': 'block'});
 
+            // Dynamically create input options.
             $( ".type1" ).change(function() {
                 var type = $(this).val();
                 var id = $(this).attr('id');
@@ -243,9 +240,10 @@ $(document).ready(function() {
             });
 
 
-
+            // Visualize the table.
             $('#visualize-button').on('click', function(e) {
 
+                // Store the user input in a dict object.
                 var user_in = {}
 
                 for (var k = 1; k < data1.header.length+1; k++) {
@@ -283,17 +281,11 @@ $(document).ready(function() {
                     }
                 }
 
-                //console.log(number_columns);
-                console.log(hieparents);
-                console.log(hiechilds);
-
-
 
                 for (var i = 1; i < data1.header.length+1; i++) {
                     colunm_names['column-'+i] = data1.header[i-1]
                 }
 
-                //console.log(colunm_names);
                 var arr_bar = [];
 
                 for (var nc = 0; nc < number_columns.length; nc++) {
@@ -304,6 +296,7 @@ $(document).ready(function() {
                 }
 
 
+                // Create controls for user interaction
                 $(arr_bar).each(function() {
                     $("#bar-display").append ("<input class='show-bar' id='" + this.val + "' type='checkbox' value='" + this.text + "' /><label for='" + this.val + "'>" + this.text + "</label>" );
                 });
@@ -319,12 +312,16 @@ $(document).ready(function() {
 
 
                 $('#wrapperdiv1').css({'display': 'none'});
+
+                // Convert the uploaded cvs file into JSON in the flask server.
+                // Make an ajax call to flask server to convert the csv file to JSON and get the JSON file.
     			$.ajax('/csv2json', {
     			    type: "POST",
     		        dataType: 'json',
     			    contentType: "application/json; charset=utf-8",
     		        data: JSON.stringify(obj),
-    		        success: function(data){
+    		        success: function(data) {
+
                         $('#table-display').html('');
 
                         var table_title = $('#table-title').val();
@@ -346,7 +343,7 @@ $(document).ready(function() {
                             var denom_val = $('#denom-col-' + k).val();
                             var date_val = $('#datefor-col-' + k).val();
 
-                            //if (typeof(number_values[column_number]) === 'undefined') {
+                            // For numeric fields display the units in the header.
                             if (unit_val != '') {
                                 value = Object.keys(data[1])[k-1] + ' (' + unit_val + ')';
                             }
@@ -368,6 +365,7 @@ $(document).ready(function() {
                             head_div.append(span2);
                             col_count += 1
     		            }
+
     		            table.append(thead)
                         var row_count = 1
                         var number_values = {};
@@ -392,9 +390,7 @@ $(document).ready(function() {
     		 	                row.append(row1);
                                 row1.append(data_span);
                                 row1.append('<hr class="cell columnhr-' + col_count +' rowhr-' + row_count +'" style="display:block;"/>')
-                                /*if (col_count == 3) {
-                                    val_array.push(v);
-                                }*/
+
                                 if (user_in[column_number] == 'number' || user_in[column_number] == 'currency') {
                                     if (typeof(number_values[column_number]) === 'undefined') {
                                         number_values[column_number] = [];
@@ -410,24 +406,24 @@ $(document).ready(function() {
                                 }
                                 col_count += 1;
     				        });
-                            /*table.find('td:last-child').addClass('collast');*/
                             row_count += 1
     				    });
-                        /*table.find('tr:last').addClass('rowlast');*/
 
     			        $('#table-display').append(table);
+
+                        // jQuery tablesorter plugin - http://tablesorter.com/docs/
     			        $(".tablesorter").tablesorter();
 
                         $('#legend').css({'display': 'block'});
-
                         $('.datefor').css({'text-align': 'right'});
 
+                        // Formating columns with data values
                         for (var i = 0; i < date_columns.length; i++) {
-                            //console.log(number_columns[i]);
                             $('.'+date_columns[i]).css({'text-align': 'right'});
                             $('.'+date_columns[i]).css({'float': 'right'});
                         }
 
+                        // Formating numeric columns
                         for (var i = 0; i < number_columns.length; i++) {
                             //console.log(number_columns[i]);
                             $('.'+number_columns[i]).css({'float': 'right'});
@@ -438,6 +434,7 @@ $(document).ready(function() {
                             var values = number_values[number_columns[i]];
                             for (var z = 1; z <= values.length; z++) {
                                 var temp = values[z-1];
+                                // Regexp to extract numbers from string
                                 var number = temp.replace(/[^-0-9\.]+/g,"");
                                 if (isNaN(parseFloat(number))) {
                                     number = '0';
@@ -471,6 +468,7 @@ $(document).ready(function() {
                             $('.' + hiechilds[i]).css({'font-weight': 'bold'});
                         }
 
+                        // Highlight row and column when a cell is hovered.
                         $('#hover').on('click', function() {
                             if($('#hover').is(':checked')) {
                                 $('#table-visualize td').hover(function() {
@@ -514,6 +512,7 @@ $(document).ready(function() {
                             }
                         });
 
+                        // Select multiple cells
                         $('#select-cells').on('click', function() {
                             var active = false;
                             if($('#select-cells').is(':checked')) {
@@ -556,6 +555,7 @@ $(document).ready(function() {
                             }
                         });
 
+                        // Summarize columns
                         $('#summarize-columns').on('click', function() {
                             if($('#summarize-columns').is(':checked')) {
 
@@ -599,6 +599,7 @@ $(document).ready(function() {
                             }
                         });
 
+                        // Summarize rows.
                         $('#summarize-rows').on('click', function() {
                             if($('#summarize-rows').is(':checked')) {
 
@@ -630,6 +631,8 @@ $(document).ready(function() {
                         });
 
 
+                        // Table Lens.
+                        // Create a bar chart inline for numeric columns
                         $('.show-bar').on('click', function() {
                             var this_id = $(this).attr('id');
                             var column = this_id.split('-')[1];
@@ -667,6 +670,7 @@ $(document).ready(function() {
                             }
                         });
 
+                        // Compress rows to hide the data values and display only the bar chart.
                         $('.compress-rows').on('click', function() {
                             if($('#compress-rows').is(':checked')) {
                                 for (var z = 1; z <= floar_arr.length; z++) {
@@ -700,6 +704,7 @@ $(document).ready(function() {
                             }
                         });
 
+                        // Export image. Use html2canvas to grab the image and save it locally.
                         $('#export-image').on('click', function() {
                             screenGrabber();
                         });

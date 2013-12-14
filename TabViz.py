@@ -78,5 +78,5 @@ def csv2json():
     return output
 
 
-#if __name__ == "__main__":
-#	app.run(port=5000)
+if __name__ == "__main__":
+	app.run(port=5000)
